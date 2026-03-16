@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from datetime import  datetime
 class Intel(BaseModel):
-   timestamp:  datetime
+   timestamp: str
    signal_id: str
    entity_id: str
    reported_lat: float
@@ -20,3 +20,5 @@ class Damage(BaseModel):
    attack_id: str
    entity_id: str
    result: str
+
+
