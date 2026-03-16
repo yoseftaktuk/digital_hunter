@@ -9,16 +9,5 @@ class Intel(BaseModel):
    signal_type: str
    priority_level: int
 
-class Attack(BaseModel):
-   timestamp: datetime
-   attack_id: str
-   entity_id: str
-   weapon_type: str
-
-class Damage(BaseModel):
-   timestamp: datetime
-   attack_id: str
-   entity_id: str
-   result: str
 
 

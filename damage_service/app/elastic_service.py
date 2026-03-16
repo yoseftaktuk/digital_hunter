@@ -17,8 +17,10 @@ class ElasticService:
                    'timestamp': {'type': 'text'},
                    'attack_id': {'type': 'keyword'},
                    'entity_id': {'type': 'keyword'},
-                   'weapon_type': {'type':'keyword'}
-               }} }  
+                   'result': {'type': 'keyword'}
+               }
+            }
+        }
         return map
     
     def create_index(self, index_name):
@@ -28,8 +30,10 @@ class ElasticService:
             return
         return
     
-    def upsert(self, data: dict, index_name):
-        doc_id = data['attack_id']
+
+    def upsert(self, data: dict, index_name, doc_id):
+        print(data)
+        doc_id = doc_id
         index_name = index_name
         document_body = data
         response = self.es.index(
@@ -37,8 +41,11 @@ class ElasticService:
             id=doc_id,
             document=document_body
         )
+        log_event(level='info', message='data update in damage index')
         return response
-    def update_intel_db(self, entity_id): 
+    
+
+    def update_intel_db(self, entity_id, result: str): 
         query = {
         'query': {
         'term': {
@@ -51,10 +58,10 @@ class ElasticService:
             data = response['hits']['hits']
             if data:
                 for item in data:
-                    item['_source']['status'] = 'attacked'
-                    self.upsert(data=item['_source'], index_name='intel')
+                    item['_source']['status'] = result
+                    print(item)
+                    self.upsert(data=item['_source'], index_name='intel', doc_id=item['_source']['signal_id'])
+                    log_event(level='info', message='data update in intel index')
                 return data
         except elasticsearch.NotFoundError as e:
             return False
-
-    
