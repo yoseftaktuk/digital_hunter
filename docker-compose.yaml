@@ -31,13 +31,48 @@ services:
 
     volumes:
       - kafka_kraft:/var/lib/kafka/data
-  Intelligence_information_targets:
-      build: /Intelligence_information_targets
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:9.3.0
+    container_name: elasticsearch
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.type=single-node
+      - bootstrap.memory_lock=true
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - xpack.security.enabled=false
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es_data:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    restart: unless-stopped
+    healthcheck:
+      test: [
+        "CMD-SHELL",
+        "curl --silent -f http://localhost:9200/_cluster/health?wait_for_status=green&timeout=1s || exit 1"
+      ]  
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 30s       
+  intel_service:
+      build: /intel_service
       environment: 
           KAFKA_URI: kafka:9092
-
+          ELASTIC_URI: http://elasticsearch:9200
+  attack_service:
+    build: /attack_service
+    environment: 
+          KAFKA_URI: kafka:9092  
+          ELASTIC_URI: http://elasticsearch:9200 
   test:
     build: /students_part_1        
 volumes:
    kafka_kraft:
+   es_data:
   

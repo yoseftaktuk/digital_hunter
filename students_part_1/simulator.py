@@ -186,7 +186,7 @@ def inject_attack_unknown_entity() -> dict[str, Any]:
     """Attack message referencing an entity that was never reported in intel."""
     unknown_entity_id = f"TGT-UNKNOWN-{random.randint(100, 999)}"
     attack_id = str(uuid.uuid4())
-    produced_attacks[attack_id] = unknown_entity_id
+    #produced_attacks[attack_id] = unknown_entity_id
 
     msg = {
         "timestamp": datetime.now(timezone.utc).isoformat(),
@@ -363,3 +363,5 @@ def _summarize(msg: dict[str, Any]) -> str:
 
 if __name__ == "__main__":
     run_simulator()
+    #print(inject_attack_unknown_entity())
+    # print(inject_intel_destroyed_entity())
