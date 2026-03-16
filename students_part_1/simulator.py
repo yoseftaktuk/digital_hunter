@@ -277,7 +277,7 @@ def _pick_topic() -> str:
     return "damage"
 
 
-def run_simulator(bootstrap_servers: str = "localhost:9092", delay: float = 1.0) -> None:
+def run_simulator(bootstrap_servers: str = "kafka:9092", delay: float = 1.0) -> None:
     """Run the simulator in a continuous loop."""
     producer = _connect_producer(bootstrap_servers)
     message_count = 0
