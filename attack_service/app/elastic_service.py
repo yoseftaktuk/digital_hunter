@@ -29,7 +29,7 @@ class ElasticService:
         return
     
     def upsert(self, data: dict, index_name):
-        doc_id = data['signal_id']
+        doc_id = data['entity_id']
         index_name = index_name
         document_body = data
         response = self.es.index(
@@ -38,5 +38,23 @@ class ElasticService:
             document=document_body
         )
         return response
-    
+    def update_intel_db(self, entity_id): 
+        query = {
+        'query': {
+        'term': {
+        'entity_id': entity_id
+        }
+        }
+        }
+        try:
+            response = self.es.search(index='intel', body=query)
+            data = response['hits']['hits']
+            if data:
+                for item in data:
+                    item['status'] = 'attacked'
+                    self.upsert(data=item['_source'], index_name='intel')
+                return data
+        except elasticsearch.NotFoundError as e:
+            return False
+
     
