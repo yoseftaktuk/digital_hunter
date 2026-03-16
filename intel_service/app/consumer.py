@@ -41,7 +41,8 @@ def get_from_kafka(topic: str):
                                                          lon1=new_data['reported_lon'],
                                                            lat2=data['reported_lat'], 
                                                            lon2=data['reported_lon'])
-                        elastic.upsert(data=data, index_name='intel')
+                        
+                        elastic.upsert(data=new_data, index_name='intel')
                         log_event(level='info',message=data)
                         continue
                     data['level_priority'] = 99
