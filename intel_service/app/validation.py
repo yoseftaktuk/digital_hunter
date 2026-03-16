@@ -29,10 +29,5 @@ class ValidService:
             print(repr(exc.errors()[0]['type']))
             return False
 
-    # def check_for_unknown_entity(self, data):   
-    #     if 'TGT-UNKNOWN' in data['entity_id']:
-    #           kafka.send_to_kafka(topic='dlq_signals_intel', data=data) 
-    #           return True
-    #     return False
-    
+
          

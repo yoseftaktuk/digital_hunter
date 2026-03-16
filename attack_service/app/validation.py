@@ -1,4 +1,3 @@
-from schema import Intel
 from pydantic import ValidationError
 from producer import KafkaService
 from schema import Attack
@@ -11,6 +10,7 @@ class ValidService:
                 data = json.loads(json_stringn_byts)
                 return True, data
             except json.JSONDecodeError as e:
+                data = {'data': json_stringn_byts}
                 data['reason_error'] = f'Invalid json detected: {e}'
                 print(f"Invalid json detected: {e}")
                 return False, data
@@ -20,7 +20,7 @@ class ValidService:
               return True
         return False
     
-    def valid_data_missing(self, data: dict):
+    def valid_data_not_missing(self, data: dict):
         try:
             Attack(**data)
             return True

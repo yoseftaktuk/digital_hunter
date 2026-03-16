@@ -34,9 +34,11 @@ def get_from_kafka(topic: str):
                     data = valid.check_json(json_stringn_byts=data)[1]
                 else: 
                     continue   
-                if valid.valid_data_missing(data=data):
-                    elastic.upsert(data=data, index_name='attack')
-                    log_event(level='info',message=data)
+                if valid.valid_data_not_missing(data=data):
+                    if not valid.check_inject_attack_unknown_entity(data=data):
+                        elastic.upsert(data=data, index_name='attack')
+                        elastic.update_intel_db(entity_id=data['entity_id'])
+                        log_event(level='info',message=data)
         if records:
             try:
                 consumer.commit_async()     
