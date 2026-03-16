@@ -48,7 +48,7 @@ def get_from_kafka(topic: str):
                     data['level_priority'] = 99
                     data['distance_between_targets'] = 0
                     elastic.upsert(data=data, index_name='intel')
-                    log_event(level='info',message=data)
+                    log_event(level='info',message=f'data update: {data}')
                 else:
                     continue    
         if records:
