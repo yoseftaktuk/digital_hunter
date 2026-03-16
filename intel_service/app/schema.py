@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from datetime import  datetime
 class Intel(BaseModel):
    timestamp: str
    signal_id: str

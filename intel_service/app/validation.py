@@ -6,7 +6,7 @@ import json
 kafka = KafkaService()
 elastic = ElasticService()
 class ValidService:
-    def check_json(self, json_stringn_byts):
+    def check_json(self, json_stringn_byts):#Checking that the json is valid
             try:
                 data = json.loads(json_stringn_byts)
                 return True, data
@@ -15,7 +15,7 @@ class ValidService:
                 data['reason_error'] = f'Invalid json detected: {e}'
                 print(f"Invalid json detected: {e}")
                 return False, data
-    def valid_data(self, data: dict):
+    def valid_data_not_missing(self, data: dict):#Checks if there is a lack of information or type errors
         try:
             Intel(**data)
             if elastic.get_attak_from_elastic(data['entity_id']):

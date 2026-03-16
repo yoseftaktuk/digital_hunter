@@ -65,16 +65,22 @@ services:
       environment: 
           KAFKA_URI: kafka:9092
           ELASTIC_URI: http://elasticsearch:9200
+      volumes:
+       - ./sherd:/app/log   
   attack_service:
     build: /attack_service
     environment: 
           KAFKA_URI: kafka:9092  
           ELASTIC_URI: http://elasticsearch:9200 
+    volumes:
+       - ./sherd:/app/log     
   damage_service:
     build: /damage_service   
     environment: 
           KAFKA_URI: kafka:9092  
-          ELASTIC_URI: http://elasticsearch:9200        
+          ELASTIC_URI: http://elasticsearch:9200   
+    volumes:
+       - ./sherd:/app/log                
   test:
     build: /students_part_1        
 volumes:

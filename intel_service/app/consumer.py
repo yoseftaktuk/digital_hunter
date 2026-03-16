@@ -34,17 +34,17 @@ def get_from_kafka(topic: str):
                     data = valid.check_json(json_stringn_byts=data)[1]
                 else: 
                     continue  
-                if valid.valid_data(data=data):
-                    if elastic.check_if_exisst(data['signal_id']):
-                        new_data = elastic.check_if_exisst(data['signal_id'])[1]
-                        new_data['level_priority'] = 99
-                        new_data['distance_between_targets'] = haversine_km(elastic.check_if_exisst(lat1=new_data['reported_lat']),
+                if valid.valid_data_not_missing(data=data):
+                    if elastic.checks_if_exists(data['entity_id']):
+                        new_data = elastic.checks_if_exists(data['entity_id'])[1][0]['_source']
+                        new_data['distance_between_targets'] = haversine_km(lat1=new_data['reported_lat'],
                                                          lon1=new_data['reported_lon'],
                                                            lat2=data['reported_lat'], 
                                                            lon2=data['reported_lon'])
                         elastic.upsert(data=data, index_name='intel')
                         log_event(level='info',message=data)
                         continue
+                    data['level_priority'] = 99
                     data['distance_between_targets'] = 0
                     elastic.upsert(data=data, index_name='intel')
                     log_event(level='info',message=data)

@@ -32,11 +32,11 @@ class ElasticService:
             return
         return
     
-    def check_if_exisst(self, signal_id):
+    def checks_if_exists(self, entity_id):
         query =  {
         'query': {
         'term': {
-        'entity_id': signal_id
+        'entity_id': entity_id
         }
         }
         }

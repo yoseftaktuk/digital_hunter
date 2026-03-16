@@ -7,7 +7,7 @@ from log import log_event
 kafka = KafkaService()
 elastic = ElasticService()
 class ValidService:
-    def check_json(self, json_stringn_byts):
+    def check_json(self, json_stringn_byts):#Checking that the json is valid
             try:
                 data = json.loads(json_stringn_byts)
                 return True, data
@@ -16,7 +16,7 @@ class ValidService:
                 data['reason_error'] = f'Invalid json detected: {e}'
                 log_event(level='error', message=f'invalid json detected {e}')
                 return False, data
-    def valid_data_not_missing(self, data: dict):
+    def valid_data_not_missing(self, data: dict):#Checks if there is a lack of information or type errors
         try:
             Damage(**data)
             return True

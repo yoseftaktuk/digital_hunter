@@ -5,7 +5,7 @@ import json
 kafka = KafkaService()
 
 class ValidService:
-    def check_json(self, json_stringn_byts):
+    def check_json(self, json_stringn_byts):#Checking that the json is valid
             try:
                 data = json.loads(json_stringn_byts)
                 return True, data
@@ -14,13 +14,14 @@ class ValidService:
                 data['reason_error'] = f'Invalid json detected: {e}'
                 print(f"Invalid json detected: {e}")
                 return False, data
-    def check_inject_attack_unknown_entity(self, data: dict):
+            
+    def check_inject_attack_unknown_entity(self, data: dict):# Looking for unknown_entity
         if 'TGT-UNKNOWN' in data['entity_id']:
               kafka.send_to_kafka(topic='dlq_signals_intel', data=data) 
               return True
         return False
     
-    def valid_data_not_missing(self, data: dict):
+    def valid_data_not_missing(self, data: dict):#Checks if there is a lack of information or type errors
         try:
             Attack(**data)
             return True
